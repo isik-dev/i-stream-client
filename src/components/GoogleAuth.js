@@ -7,8 +7,7 @@ class GoogleAuth extends React.Component {
     window.gapi.load("client:auth2", () => {
       window.gapi.client
         .init({
-          clientId:
-            "120523506362-hbkfa99p63lk6vr2kr7nkb3nldsthuoo.apps.googleusercontent.com",
+          clientId: process.env.REACT_APP_GOOGLE,
           scope: "email",
         })
         .then(() => {
@@ -21,7 +20,7 @@ class GoogleAuth extends React.Component {
   renderAuthButton() {
     if (this.state.isSignedIn === null) {
       return <div>I dont know if we are signed in or not</div>;
-    } else if (this.state.isSignedIn === true) {
+    } else if (this.state.isSignedIn) {
       return <div>I am signed in</div>;
     } else {
       return <div>I am not signed in</div>;
