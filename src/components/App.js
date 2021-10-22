@@ -7,6 +7,7 @@ import StreamShow from "./streams/StreamShow";
 import StreamCreate from "./streams/StreamCreate";
 import Header from "./Header";
 
+// has divided all of the streams comps into a different file
 const App = () => {
   return (
     <div className="ui container">
