@@ -1,12 +1,12 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 
 const PageOne = () => {
   return (
     <div>
-      This is a bad approach of navigating!
+      This is a good approach of navigating!
       <br />
-      This is page 1<a href="/pagetwo">Go to page two</a>
+      This is page 1<Link to="/pagetwo">Go to page two</Link>
     </div>
   );
 };
