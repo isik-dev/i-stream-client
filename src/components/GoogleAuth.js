@@ -9,6 +9,10 @@ import React from "react";
 // inside that callback function we should pass clientId and scope, so that later we can initialize GoogleAuth object!
 
 // window.gapi.client.init({}) is going to return us a promise. Thus, we should proceed with .then(() => {})
+// inside .then() we have a a callback function -> one being a one time setting of our state & two a listener wth its own callback that will change our state
+
+// the first setState will be invoked as soon as the window.gapi library is loaded.
+// the second setState will be invoked when we signIn or signOut
 
 class GoogleAuth extends React.Component {
   state = { signInStatus: null };
@@ -22,22 +26,45 @@ class GoogleAuth extends React.Component {
         .then(() => {
           this.auth = window.gapi.auth2.getAuthInstance();
           this.setState({ signInStatus: this.auth.isSignedIn.get() });
+          this.auth.isSignedIn.listen(this.onAuthChange);
         });
     });
   }
 
-  checkIfSignedIn = () => {
+  onAuthChange = () => {
+    this.setState({ signInStatus: this.auth.isSignedIn.get() });
+  };
+
+  onSignIn = () => {
+    this.auth.signIn();
+  };
+
+  onSignOut = () => {
+    this.auth.signOut();
+  };
+
+  renderAuthButton = () => {
     if (this.state.signInStatus === null) {
-      return <div>I dont know if it is signed in</div>;
+      return null;
     } else if (this.state.signInStatus) {
-      return <div>It is signed in</div>;
+      return (
+        <button onClick={this.onSignOut} className="ui red google button">
+          <i className="google icon" />
+          Sign Out
+        </button>
+      );
     } else {
-      return <div>It is not signed in</div>;
+      return (
+        <button onClick={this.onSignIn} className="ui green google button">
+          <i className="google icon" />
+          Sign In with Google
+        </button>
+      );
     }
   };
 
   render() {
-    return <div>{this.checkIfSignedIn()}</div>;
+    return <div>{this.renderAuthButton()}</div>;
   }
 }
 
