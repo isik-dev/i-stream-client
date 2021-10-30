@@ -14,6 +14,7 @@ import React from "react";
 // the first setState will be invoked as soon as the window.gapi library is loaded.
 // the second setState will be invoked when we signIn or signOut
 
+// From here on the google auth logic has to be moved into redux
 class GoogleAuth extends React.Component {
   state = { signInStatus: null };
   componentDidMount() {
