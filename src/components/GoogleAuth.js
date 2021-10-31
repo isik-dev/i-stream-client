@@ -22,7 +22,6 @@ import { signIn, signOut } from "../actions";
 
 // The first thing I am doing is to import actions creators and hook them up to my GoogleAuth component => using react-redux connect function
 class GoogleAuth extends React.Component {
-  state = { signInStatus: null };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
       window.gapi.client
@@ -32,7 +31,7 @@ class GoogleAuth extends React.Component {
         })
         .then(() => {
           this.auth = window.gapi.auth2.getAuthInstance();
-          this.setState({ signInStatus: this.auth.isSignedIn.get() });
+          this.onAuthChange(this.auth.isSignedIn.get());
           this.auth.isSignedIn.listen(this.onAuthChange);
         });
     });
@@ -55,9 +54,9 @@ class GoogleAuth extends React.Component {
   };
 
   renderAuthButton = () => {
-    if (this.state.signInStatus === null) {
+    if (this.props.isSignedIn === null) {
       return null;
-    } else if (this.state.signInStatus) {
+    } else if (this.props.isSignedIn) {
       return (
         <button onClick={this.onSignOutClick} className="ui red google button">
           <i className="google icon" />
@@ -75,8 +74,13 @@ class GoogleAuth extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return <div>{this.renderAuthButton()}</div>;
   }
 }
 
-export default connect(null, { signIn, signOut })(GoogleAuth);
+const mapStateToProps = (state) => {
+  return { isSignedIn: state.auth.isSignedIn };
+};
+
+export default connect(mapStateToProps, { signIn, signOut })(GoogleAuth);

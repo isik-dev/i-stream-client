@@ -3,7 +3,7 @@ const INITIAL_STATE = {
 };
 
 export const authReducer = (state = INITIAL_STATE, action) => {
-  switch (action.payload) {
+  switch (action.type) {
     case "SIGN_IN":
       return { ...state, isSignedIn: true };
     case "SIGN_OUT":
