@@ -1,4 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { signIn, signOut } from "../actions";
+
 // when the component first renders to the screen we will load google auth library as follows:
 // componentDidMount() { window.gapi.load('client:auth2') }
 
@@ -15,6 +19,8 @@ import React from "react";
 // the second setState will be invoked when we signIn or signOut
 
 // From here on the google auth logic has to be moved into redux
+
+// The first thing I am doing is to import actions creators and hook them up to my GoogleAuth component => using react-redux connect function
 class GoogleAuth extends React.Component {
   state = { signInStatus: null };
   componentDidMount() {
@@ -32,8 +38,12 @@ class GoogleAuth extends React.Component {
     });
   }
 
-  onAuthChange = () => {
-    this.setState({ signInStatus: this.auth.isSignedIn.get() });
+  onAuthChange = (isSignedIn) => {
+    if (isSignedIn) {
+      this.props.signIn();
+    } else {
+      this.props.signOut();
+    }
   };
 
   onSignInClick = () => {
@@ -69,4 +79,4 @@ class GoogleAuth extends React.Component {
   }
 }
 
-export default GoogleAuth;
+export default connect(null, { signIn, signOut })(GoogleAuth);
